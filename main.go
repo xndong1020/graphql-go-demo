@@ -8,11 +8,13 @@ import (
 	"acy.com/graphqlgodemo/database"
 	"acy.com/graphqlgodemo/graph"
 	"acy.com/graphqlgodemo/graph/schemas"
+	"acy.com/graphqlgodemo/middlewares"
 	"acy.com/graphqlgodemo/repositories"
 	"acy.com/graphqlgodemo/services"
 
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/handler"
+
 	"github.com/joho/godotenv"
 )
 
@@ -64,7 +66,7 @@ func main() {
 		Playground: true,
 	})
 
-	http.Handle("/graphql", h)
+	http.Handle("/graphql", middlewares.CorsMiddleware(h))
 	log.Printf("connect to http://localhost:%s/graphql for GraphQL playground", defaultPort)
 	log.Fatal(http.ListenAndServe(":"+defaultPort, nil))
 }
