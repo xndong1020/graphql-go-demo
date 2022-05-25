@@ -12,7 +12,7 @@ func GetQueryFields(r *graph.Resolver) graphql.Fields {
 		"GetAllBooks": &graphql.Field{
 			// Description explains the field
 			Description: "Query all books",
-			Type: graphql.NewNonNull(graphql.NewList(types.BookType)),
+			Type: graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(types.BookType))),
 			// Resolve is the function used to look up data
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 				return r.BookService.GetAllBooks()
