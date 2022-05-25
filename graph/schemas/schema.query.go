@@ -12,7 +12,7 @@ func GetQueryFields(r *graph.Resolver) graphql.Fields {
 		"GetAllBooks": &graphql.Field{
 			// Description explains the field
 			Description: "Query all books",
-			Type: graphql.NewList(types.BookType),
+			Type: graphql.NewNonNull(graphql.NewList(types.BookType)),
 			// Resolve is the function used to look up data
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 				return r.BookService.GetAllBooks()
@@ -21,10 +21,10 @@ func GetQueryFields(r *graph.Resolver) graphql.Fields {
 		"GetOneBook": &graphql.Field{
 			// Description explains the field
 			Description: "Query one book by id",
-			Type: types.BookType,
+			Type: graphql.NewNonNull(types.BookType),
 			Args: graphql.FieldConfigArgument{
 					"id": &graphql.ArgumentConfig{
-						Type: graphql.Int,
+						Type: graphql.NewNonNull(graphql.Int),
 					},
 				},
 			// Resolve is the function used to look up data

@@ -12,11 +12,11 @@ import (
 func GetMutationFields(r *graph.Resolver) graphql.Fields {
 	return graphql.Fields{
 			"CreateBook": &graphql.Field{
-				Type:        types.BookType,
+				Type:        graphql.NewNonNull(types.BookType),
 				Description: "Create a new Book",
 				Args: graphql.FieldConfigArgument{
 					"input": &graphql.ArgumentConfig{
-						Type: types.BookInputType,
+						Type: graphql.NewNonNull(types.BookInputType),
 					},
 				},
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
@@ -30,14 +30,14 @@ func GetMutationFields(r *graph.Resolver) graphql.Fields {
 				},
 			},
 			"UpdateBook": &graphql.Field{
-				Type:        graphql.String,
+				Type:        graphql.NewNonNull(graphql.String),
 				Description: "Update an existing Book",
 				Args: graphql.FieldConfigArgument{
 					"id": &graphql.ArgumentConfig{
-						Type: graphql.Int,
+						Type: graphql.NewNonNull(graphql.Int),
 					},
 					"input": &graphql.ArgumentConfig{
-						Type: types.BookInputType,
+						Type: graphql.NewNonNull(types.BookInputType),
 					},
 				},
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
@@ -56,11 +56,11 @@ func GetMutationFields(r *graph.Resolver) graphql.Fields {
 				},
 			},
 			"DeleteBook": &graphql.Field{
-				Type:        graphql.String,
+				Type:        graphql.NewNonNull(graphql.String),
 				Description: "Delete an existing Book",
 				Args: graphql.FieldConfigArgument{
 					"id": &graphql.ArgumentConfig{
-						Type: graphql.Int,
+						Type: graphql.NewNonNull(graphql.Int),
 					},
 				},
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
