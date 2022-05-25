@@ -2,9 +2,7 @@ package database
 
 import (
 	"fmt"
-	"os"
 
-	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -30,21 +28,3 @@ func NewConnection(config *Config) (*gorm.DB, error) {
     }
     return db, nil
 }
-
-func NewDbInstance() (*gorm.DB, error)  {
-	godotenv.Load()
-
-	config := &Config{
-        Host:     os.Getenv("DB_HOST"),
-        Port:     os.Getenv("DB_PORT"),
-        Password: os.Getenv("DB_PASS"),
-        User:     os.Getenv("DB_USER"),
-        SSLMode:  os.Getenv("DB_SSLMODE"),
-        DBName:   os.Getenv("DB_NAME"),
-		Schema:   os.Getenv("DB_SCHEMA"),
-    }
-
-	return NewConnection(config)
-}
-
-var DbInstance, _ = NewDbInstance()

@@ -1,16 +1,13 @@
 package schemas
 
 import (
-	"acy.com/graphqlgodemo/database"
+	"acy.com/graphqlgodemo/graph"
 	"acy.com/graphqlgodemo/graph/types"
-	"acy.com/graphqlgodemo/repositories"
-	"acy.com/graphqlgodemo/services"
 	"github.com/graphql-go/graphql"
 )
 
 // get query schemas
-func GetQueryFields() graphql.Fields {
-	var bookService = services.NewBookService(repositories.NewBookRepository(database.DbInstance))
+func GetQueryFields(r *graph.Resolver) graphql.Fields {
 	return graphql.Fields{
 		"GetAllBooks": &graphql.Field{
 			// Description explains the field
@@ -18,7 +15,7 @@ func GetQueryFields() graphql.Fields {
 			Type: graphql.NewList(types.BookType),
 			// Resolve is the function used to look up data
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
-				return bookService.GetAllBooks()
+				return r.BookService.GetAllBooks()
 			},
 		},
 		"GetOneBook": &graphql.Field{
@@ -32,7 +29,7 @@ func GetQueryFields() graphql.Fields {
 				},
 			// Resolve is the function used to look up data
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
-				return bookService.GetOneBook(params.Args["id"].(int))
+				return r.BookService.GetOneBook(params.Args["id"].(int))
 			},
 		},
 	}
