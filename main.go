@@ -13,8 +13,8 @@ import (
 const defaultPort = "8080"
 
 func main() {
-	rootQuery := graphql.ObjectConfig{Name: "RootQuery", Fields: schemas.QueryFields}
-	rootMutation := graphql.ObjectConfig{Name: "rootMutation",Fields: schemas.MutationFields}
+	rootQuery := graphql.ObjectConfig{Name: "RootQuery", Fields: schemas.GetQueryFields()}
+	rootMutation := graphql.ObjectConfig{Name: "rootMutation",Fields: schemas.GetMutationFields()}
 
 	// Now combine into a Schema Configuration
 	schemaConfig := graphql.SchemaConfig{

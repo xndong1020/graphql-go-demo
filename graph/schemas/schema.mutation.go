@@ -1,12 +1,19 @@
 package schemas
 
 import (
+	"fmt"
+
+	"acy.com/graphqlgodemo/database"
+	"acy.com/graphqlgodemo/dtos"
 	"acy.com/graphqlgodemo/graph/types"
-	"acy.com/graphqlgodemo/models"
+	"acy.com/graphqlgodemo/repositories"
+	"acy.com/graphqlgodemo/services"
 	"github.com/graphql-go/graphql"
 )
 
-var MutationFields = graphql.Fields{
+func GetMutationFields() graphql.Fields {
+	bookService := services.NewBookService(repositories.NewBookRepository(database.DbInstance))
+	return graphql.Fields{
 			"CreateBook": &graphql.Field{
 				Type:        types.BookType,
 				Description: "Create a new Book",
@@ -17,13 +24,12 @@ var MutationFields = graphql.Fields{
 				},
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 					input := params.Args["input"].(map[string]interface{})
-					book := &models.Book{
-						ID: 5,
+					bookInput := &dtos.BookInput{
 						Title: input["title"].(string),
 						Author: input["author"].(string),
 						Publisher: input["publisher"].(string),
 					}
-					return book, nil
+					return bookService.CreateBook(bookInput)
 				},
 			},
 			"UpdateBook": &graphql.Field{
@@ -38,14 +44,18 @@ var MutationFields = graphql.Fields{
 					},
 				},
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
-					// input := params.Args["input"].(map[string]interface{})
-					// newBook := &models.Book{
-					// 	ID: 5,
-					// 	Title: input["title"].(string),
-					// 	Author: input["author"].(string),
-					// 	Publisher: input["publisher"].(string),
-					// }
-					return "worked!", nil
+					id := params.Args["id"].(int)
+					input := params.Args["input"].(map[string]interface{})
+					bookInput := &dtos.BookInput{
+						Title: input["title"].(string),
+						Author: input["author"].(string),
+						Publisher: input["publisher"].(string),
+					}
+					err := bookService.UpdateBook( bookInput, id)
+					if err != nil {
+						return nil, err
+					}
+					return fmt.Sprintf("Book with id:%d has been updated successfully", id), nil
 				},
 			},
 			"DeleteBook": &graphql.Field{
@@ -57,14 +67,13 @@ var MutationFields = graphql.Fields{
 					},
 				},
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
-					// input := params.Args["input"].(map[string]interface{})
-					// newBook := &models.Book{
-					// 	ID: 5,
-					// 	Title: input["title"].(string),
-					// 	Author: input["author"].(string),
-					// 	Publisher: input["publisher"].(string),
-					// }
-					return "worked!", nil
+					id := params.Args["id"].(int)
+					err := bookService.DeleteBook(id)
+					if err != nil {
+						return nil, err
+					}
+					return fmt.Sprintf("Book with id:%d has been deleted successfully", id), nil
 				},
 			},
 		}
+}

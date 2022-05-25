@@ -1,28 +1,24 @@
 package schemas
 
 import (
+	"acy.com/graphqlgodemo/database"
 	"acy.com/graphqlgodemo/graph/types"
-	"acy.com/graphqlgodemo/models"
+	"acy.com/graphqlgodemo/repositories"
+	"acy.com/graphqlgodemo/services"
 	"github.com/graphql-go/graphql"
 )
 
-// query schemas
-var QueryFields = graphql.Fields{
+// get query schemas
+func GetQueryFields() graphql.Fields {
+	var bookService = services.NewBookService(repositories.NewBookRepository(database.DbInstance))
+	return graphql.Fields{
 		"GetAllBooks": &graphql.Field{
 			// Description explains the field
 			Description: "Query all books",
 			Type: graphql.NewList(types.BookType),
 			// Resolve is the function used to look up data
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
-				allBooks := []*models.Book{}
-				book := &models.Book{
-					ID: 5,
-                    Title: "test 01",
-					Author: "test 01",
-					Publisher: "test 01",
-                }
-				allBooks = append(allBooks, book)
-				return allBooks, nil
+				return bookService.GetAllBooks()
 			},
 		},
 		"GetOneBook": &graphql.Field{
@@ -36,13 +32,8 @@ var QueryFields = graphql.Fields{
 				},
 			// Resolve is the function used to look up data
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
-				book := &models.Book{
-					ID: params.Args["id"].(int),
-                    Title: "test 01",
-					Author: "test 01",
-					Publisher: "test 01",
-                }
-				return book, nil
+				return bookService.GetOneBook(params.Args["id"].(int))
 			},
 		},
 	}
+}
