@@ -7,16 +7,16 @@ var BookType = graphql.NewObject(
 		Name: "Book",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
-				Type: graphql.String,
+				Type: graphql.NewNonNull(graphql.String),
 			},
 			"title": &graphql.Field{
-				Type: graphql.String,
+				Type: graphql.NewNonNull(graphql.String),
 			},
 			"author": &graphql.Field{
-				Type: graphql.String,
+				Type: graphql.NewNonNull(graphql.String),
 			},
 			"publisher": &graphql.Field{
-				Type: graphql.String,
+				Type: graphql.NewNonNull(graphql.String),
 			},
 		},
 	},
@@ -27,24 +27,14 @@ var BookInputType = graphql.NewInputObject(
 		Name: "BookInput",
 		Fields: graphql.InputObjectConfigFieldMap{
 			"title": &graphql.InputObjectFieldConfig{
-				Type: graphql.String,
+				Type: graphql.NewNonNull(graphql.String),
 			},
 			"author": &graphql.InputObjectFieldConfig{
-				Type: graphql.String,
+				Type: graphql.NewNonNull(graphql.String),
 			},
 			"publisher": &graphql.InputObjectFieldConfig{
-				Type: graphql.String,
+				Type: graphql.NewNonNull(graphql.String),
 			},
 		},
 	},
 ) 
-
-var ErrorType = graphql.NewObject(
-	graphql.ObjectConfig{
-		Name: "Error",
-		Fields: graphql.Fields{
-			"message": &graphql.Field{
-				Type: graphql.String,
-			},
-		},
-	})
