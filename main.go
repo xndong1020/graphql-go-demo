@@ -34,9 +34,9 @@ func main() {
 
 	db, err := database.NewConnection(config)
 	
-    if err != nil {
-        panic(err)
-    }
+	if err != nil {
+		panic(err)
+	}
 
 	resolver := &graph.Resolver{BookService: services.NewBookService(repositories.NewBookRepository(db))}
 
